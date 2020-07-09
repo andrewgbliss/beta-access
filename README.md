@@ -71,3 +71,9 @@ npm run api:build
 ```
 npm run build
 ```
+
+### Serve from the compiled app
+
+```
+npm start
+```
