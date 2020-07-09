@@ -17,7 +17,7 @@
     "client:start": "cd client && npm start",
     "client:build": "cd client && npm run build && cd ..",
     "client:test": "cd client && npm test",
-    "client:copy": "cd api && ls && cp -r ./client/build/* ./api/build/client",
+    "client:copy": "cd api/build && ls && cp -r ./client/build/* ./api/build/client",
     "build": "npm-run-all api:build client:build client:copy",
     "test": "npm-run-all api:test client:test",
     "migrate": "npm run api:sequelize db:migrate",
