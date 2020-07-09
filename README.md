@@ -29,13 +29,13 @@ npm run api:build
 ### Run migrations
 
 ```
-npm rum migrate
+npm run migrate
 ```
 
 ### Run seeder
 
 ```
-npm rum seed
+npm run seed
 ```
 
 ## Development
