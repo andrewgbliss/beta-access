@@ -1,6 +1,10 @@
 {
   "name": "app-starter",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=14.5.0",
+    "npm": ">=6.14.5"
+  },
   "scripts": {
     "start": "node -r dotenv/config ./api/build/index.js",
     "api:build": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc  --project ./api/tsconfig.json",
@@ -13,7 +17,7 @@
     "client:start": "cd client && npm start",
     "client:build": "cd client && npm run build && cd ..",
     "client:test": "cd client && npm test",
-    "client:copy": "cp -r ./client/build/* ./api/build/client",
+    "client:copy": "ls && cp -r ./client/build/* ./api/build/client",
     "build": "npm-run-all api:build client:build client:copy",
     "test": "npm-run-all api:test client:test",
     "migrate": "npm run api:sequelize db:migrate",
