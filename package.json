@@ -17,7 +17,8 @@
     "build": "npm-run-all api:build client:build client:copy",
     "test": "npm-run-all api:test client:test",
     "migrate": "npm run api:sequelize db:migrate",
-    "seed": "npm run api:sequelize db:seed:all"
+    "seed": "npm run api:sequelize db:seed:all",
+    "heroku-postbuild": "npm-run-all build"
   },
   "dependencies": {
     "axios": "^0.19.2",
