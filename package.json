@@ -11,7 +11,7 @@
     "api:db-utils": "sh ./api/src/db/scripts/db-utils.sh",
     "api:sequelize": "cd ./api/build/db && sequelize",
     "client:start": "cd client && npm start",
-    "client:build": "cd client && npm run build",
+    "client:build": "cd client && npm run build && cd ..",
     "client:test": "cd client && npm test",
     "client:copy": "cp -r ./client/build/* ./api/build/client",
     "build": "npm-run-all api:build client:build client:copy",
