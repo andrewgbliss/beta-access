@@ -1,0 +1,84 @@
+{
+  "name": "app-starter",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node -r dotenv/config ./api/build/index.js",
+    "api:build": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc  --project ./api/tsconfig.json",
+    "api:dev": "ts-node-dev --project ./api/tsconfig.json -r dotenv/config --watch -- ./api/src/index.ts",
+    "api:test": "NODE_ENV=test ts-mocha --project ./api/tsconfig.json ./api/src/**/*.spec.ts",
+    "api:lint-staged": "lint-staged",
+    "api:validate": "npm-run-all test lint-staged",
+    "api:db-utils": "sh ./api/src/db/scripts/db-utils.sh",
+    "api:sequelize": "cd ./api/build/db && sequelize",
+    "client:start": "cd client && npm start",
+    "client:build": "cd client && npm run build",
+    "client:test": "cd client && npm test",
+    "client:copy": "cp -r ./client/build/* ./api/build/client",
+    "build": "npm-run-all api:build client:build client:copy",
+    "test": "npm-run-all api:test client:test",
+    "migrate": "npm run api:sequelize db:migrate",
+    "seed": "npm run api:sequelize db:seed:all"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment": "^2.27.0",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.4.10",
+    "nodemailer-mailgun-transport": "^2.0.0",
+    "pg": "^8.2.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1",
+    "sequelize": "^6.3.0",
+    "sequelize-cli": "6.2.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.0",
+    "@testing-library/react": "^10.4.4",
+    "@testing-library/user-event": "^12.0.11",
+    "@types/expect": "^24.3.0",
+    "@types/express": "^4.17.7",
+    "@types/jest": "^26.0.4",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^14.0.18",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "chai": "^4.2.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "mocha": "^8.0.1",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "ts-mocha": "^7.0.0",
+    "ts-node": "^8.10.2",
+    "ts-node-dev": "1.0.0-pre.50",
+    "typescript": "^3.9.6"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "build",
+    "baseUrl": "src",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "target": "es6",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2016",
+      "dom"
+    ],
+    "allowJs": true,
+    "paths": {
+      "*": [
+        "./node_modules/@types/*",
+        "*"
+      ]
+    },
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "listFiles": false,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "types": [
+      "node",
+      "mocha"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+  "transpileOnly": true,
+  "files": [
+    "@types/index.d.ts"
+  ]
+}
