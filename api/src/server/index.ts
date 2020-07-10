@@ -1,7 +1,7 @@
-import express, { CookieOptions } from 'express';
+import express, { Response, Request, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
+import logger from './middleware/logger';
 import expressjwt from 'express-jwt';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
@@ -15,12 +15,12 @@ const app = express();
 const http = require('http').Server(app);
 
 /**
- * Environment ∏
+ * Environment
  */
 const JWT_SECRET = process.env.JWT_SECRET;
 const PORT = process.env.PORT;
 const NODE_ENV = process.env.NODE_ENV;
-const SESSION_TIMEOUT = process.env.SESSION_TIMEOUT;
+const SESSION_TIMEOUT = process.env.SESSION_TIMEOUT || 3600 * 24; // 24 hours
 
 /**
  * Express Variables
@@ -41,7 +41,7 @@ if (NODE_ENV === 'production') {
  * Middleware
  */
 app.use(cors());
-app.use(logger('tiny'));
+app.use(logger);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -51,8 +51,9 @@ app.use(cookieParser());
  */
 app.use(
   expressjwt({
-    algorithms: ['RS256'],
+    algorithms: ['HS256'],
     secret: JWT_SECRET,
+    credentialsRequired: false,
     getToken(req) {
       if (
         req.headers.authorization &&
@@ -61,46 +62,34 @@ app.use(
         return req.headers.authorization.split(' ')[1];
       } else if (req.query && req.query.token) {
         return req.query.token;
-      } else if (req.cookies && req.cookies.token) {
-        return req.cookies.token;
       }
       return null;
     },
-  }).unless({
-    path: [
-      '/test',
-      '/api/v1/healthcheck',
-      '/api/v1/healthcheck/error',
-      '/api/v1/info',
-      '/api/v1/login',
-      '/api/v1/logout',
-      '/api/v1/register',
-      '/api/v1/register/complete',
-      /\/api\/v1\/register\/complete\//i,
-      '/api/v1/reset-password',
-      /\/api\/v1\/reset-password\//i,
-    ],
   })
 );
 
 /**
  * Refresh JWT for each use
  */
-app.use(async (req, res, next) => {
-  req.refreshJWT = (id) => {
-    const token = jwt.sign({ id, createdAt: new Date() }, JWT_SECRET, {
-      expiresIn: SESSION_TIMEOUT,
-    });
-    const options: CookieOptions = {
-      maxAge: Number(SESSION_TIMEOUT),
-      httpOnly: false,
-    };
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+  req.refreshJWT = (id: number, accountId: number) => {
+    const token = jwt.sign(
+      {
+        id,
+        account: {
+          id: accountId,
+        },
+        createdAt: new Date(),
+      },
+      JWT_SECRET,
+      {
+        expiresIn: SESSION_TIMEOUT,
+      }
+    );
     res.set('JWT_TOKEN', token);
-    res.cookie('token', token, options);
-    return token;
   };
   if (req.user) {
-    req.refreshJWT(req.user.id);
+    req.refreshJWT(req.user.id, req.user.account.id);
     next();
   } else {
     next();
@@ -112,19 +101,19 @@ app.use('/', routes);
 // If its production then just server the index.html
 // if it can't find the route
 if (NODE_ENV === 'production') {
-  app.use('*', (req, res, next) => {
+  app.use('*', (req: Request, res: Response, next: NextFunction) => {
     res.sendFile(path.join(__dirname, '..', 'client', 'index.html'));
   });
 } else {
   // If its not production then throw a 404
-  app.use((req, res, next) => {
+  app.use((req: Request, res: Response, next: NextFunction) => {
     const err: any = new Error(`${req.method} ${req.url} Not Found`);
     err.status = 404;
     next(err);
   });
 }
 
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err);
   res.status(err.status || 500);
   res.json({
@@ -142,7 +131,7 @@ const server = app.listen(PORT, () => {
   );
 });
 
-let io;
+let io: any;
 (async () => {
   io = await socket(http);
   app.set('socket.io', io);

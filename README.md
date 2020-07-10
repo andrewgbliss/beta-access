@@ -1,79 +1,34 @@
 # Local Development
 
-## Installation
+### Installation
 
 ```
 npm i
 ```
 
-## Dev ops
-
 ### Environment
 
 Copy the `sample.env` into an `.env` file.
 
-### Start the database
+### Starting docker services
 
 ```
 docker-compose up
 ```
 
-This will start postgres running in docker.
-
-### Build the api dev server
-
-```
-npm run api:build
-```
+- client - React app
+- api - Api Gateway
+- nginx - Serve everything through localhost on local development
+- db - Database scripts
 
 ### Run migrations
 
 ```
-npm run migrate
+docker-compose run --rm api npm run migrate
 ```
 
 ### Run seeder
 
 ```
-npm run seed
-```
-
-## Development
-
-### Start the api dev server
-
-```
-npm run api:dev
-```
-
-### Start the client frontend
-
-```
-npm run client:start
-```
-
-## Building
-
-### Build the client frontend
-
-```
-npm run client:build
-```
-
-### Build the api dev server
-
-```
-npm run api:build
-```
-
-### Build everything
-
-```
-npm run build
-```
-
-### Serve from the compiled app
-
-```
-npm start
+docker-compose run --rm api npm run seed
 ```

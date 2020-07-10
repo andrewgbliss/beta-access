@@ -1,8 +1,9 @@
 import express from 'express';
-import ApiRoutes from './api';
+import PrivateApiRoutes from './private';
+import PublicApiRoutes from './public';
 
 const router = express.Router();
 
-router.use('/api', ApiRoutes);
+router.use('/api', [PublicApiRoutes, PrivateApiRoutes]);
 
 export default router;

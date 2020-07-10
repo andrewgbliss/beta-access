@@ -20,7 +20,8 @@ class Users extends Model {
   hashPassword() {
     this.password = bcrypt.hashSync(this.password);
   }
-  setResetPassword(timeout) {
+  setResetPassword() {
+    const timeout = 15;
     const today = new Date();
     const twoweeks = new Date(
       today.getFullYear(),
