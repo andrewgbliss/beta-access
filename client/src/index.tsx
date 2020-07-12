@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import 'mobx-react-lite/batchingForReactDom';
+import 'assets/css/styles.css';
+import App from 'app/App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(

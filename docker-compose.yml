@@ -1,5 +1,45 @@
 version: "3"
 services:
+  client:
+    build: .
+    depends_on:
+      - db
+      - api
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/usr/src/app:cached
+    command: ["npm", "run", "client:start"]
+
+  api:
+    build: .
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/usr/src/app:cached
+    command: ["npm", "run", "api:dev"]
+
+  nginx:
+    build: ./nginx
+    depends_on:
+      - api
+      - client
+    ports:
+      - "80:80"
+    restart: always
+
   db:
     build: ./db
     ports:

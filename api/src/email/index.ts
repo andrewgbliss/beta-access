@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 import mg from 'nodemailer-mailgun-transport';
 
-const HOST = process.env.HOST;
+const EMAIL_HOST = process.env.EMAIL_HOST;
 
 const auth = {
   auth: {
@@ -24,24 +24,24 @@ const from = '"Support" <support@gmail.com>';
 
 export default {
   register(to, hash) {
-    const link = `${HOST}/register/complete/${hash}`;
+    const link = `${EMAIL_HOST}/register/complete/${hash}`;
     const options = {
       from,
       to,
-      subject: 'Welcome To Website! Confirm Your Email',
-      text: `Go here to confirm ${link}`,
-      html: `<a href="${link}">Click here to confirm</a>`,
+      subject: 'Welcome to the Website! Confirm Your Email',
+      text: `<h2>Welcome to the Website</h2><div>Go here to confirm</div><div>${link}</div>`,
+      html: `<h2>Welcome to the Website</h2><a href="${link}">Click here to complete registration</a>`,
     };
     return sendMail(options);
   },
   resetPassword(to, hash) {
-    const link = `${HOST}/reset-password/verify/${hash}`;
+    const link = `${EMAIL_HOST}/reset-password/verify/${hash}`;
     const options = {
       from,
       to,
       subject: 'Reset Your Password',
       text: `Go here to reset your password ${link}`,
-      html: `<a href="${link}">Click here to reset your password</a>`,
+      html: `<h2>Reset your password</h2><a href="${link}">Click here to reset your password</a>`,
     };
     return sendMail(options);
   },

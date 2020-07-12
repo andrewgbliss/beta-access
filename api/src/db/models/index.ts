@@ -6,13 +6,7 @@ const config = require('../config/config');
 const env = process.env.NODE_ENV;
 const configEnv = config[env];
 
-let sequelize;
-sequelize = new Sequelize(
-  configEnv.database,
-  configEnv.username,
-  configEnv.password,
-  configEnv
-);
+const sequelize = new Sequelize(process.env.DATABASE_URL, configEnv);
 
 const models = {
   Users: UsersFactory(sequelize),
